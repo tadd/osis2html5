@@ -6,7 +6,7 @@ To know what OSIS is, visit [Cross Wire site.](https://www.crosswire.org/osis/)
 
 ## Usage
 
-$ osis2html5 <input.osis> <output dirname>
+$ osis2html5 `<input.osis>` `<output dirname>`
 
 ## License
 
