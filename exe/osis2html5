@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require "osis2html5"
+
+Osis2Html5.run(*ARGV)
