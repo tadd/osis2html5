@@ -60,6 +60,6 @@ module Osis2Html5
   end
 
   def osis_id_to_inner_id(osis_id)
-    osis_id.sub(/^[^\.]+\./, '')
+    osis_id.sub(/^[^\.]+\./, '').sub('.', ':')
   end
 end
