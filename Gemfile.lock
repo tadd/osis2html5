@@ -3,6 +3,7 @@ PATH
   specs:
     osis2html5 (0.1.0)
       nokogiri (> 0)
+      parallel (> 0)
 
 GEM
   remote: https://rubygems.org/
@@ -10,6 +11,7 @@ GEM
     mini_portile2 (2.3.0)
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
+    parallel (1.12.1)
     power_assert (1.1.2)
     rake (12.3.1)
     test-unit (3.2.8)

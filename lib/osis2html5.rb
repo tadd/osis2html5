@@ -1,6 +1,7 @@
 require 'osis2html5/version'
 
 require 'nokogiri'
+require 'parallel'
 
 module Osis2Html5
   module_function
@@ -28,7 +29,7 @@ module Osis2Html5
     doc = Nokogiri::XML.parse(File.read(osis))
 
     header 'processing each books'
-    doc.css('div[@type="book"]').each do |book|
+    Parallel.each(doc.css('div[@type="book"]')) do |book|
       process_book(book)
     end
 
