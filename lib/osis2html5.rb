@@ -52,14 +52,83 @@ module Osis2Html5
     name = book[:osisID].downcase
     header name
 
+    book[:class] = 'book'
+    book.remove_attribute('type')
+    book.remove_attribute('osisID')
+
+    title = book.at_css('title')
+    title.name = 'h1'
+    title.remove_attribute('type')
+
     convert_ruby(book)
+    convert_chapters(book)
     filename = name + '.html'
 
+    add_headers_and_footers(book)
     path = File.join(ARGV[1], filename)
-    File.write(path, book.to_xhtml)
+    File.write(path, format_as_whole_doc(book, title.content))
   end
 
   def osis_id_to_inner_id(osis_id)
     osis_id.sub(/^[^\.]+\./, '').sub('.', ':')
+  end
+
+  def convert_chapters(book)
+    book.css('chapter').each do |chapter|
+      chapter.name = 'div'
+      chapter[:id] = osis_id_to_inner_id(chapter[:osisID])
+      chapter.remove_attribute('osisID')
+      title = chapter.at_css('title')
+      title.name = 'h2'
+      title[:class] = 'chapter-name'
+      title.remove_attribute('type')
+
+      convert_verses(chapter)
+    end
+  end
+
+  def convert_verses(book)
+    book.css('verse').each do |verse|
+      if verse[:osisID].nil? # TODO: better HTML
+        verse.remove
+        next
+      end
+      verse.name = 'span'
+      verse[:class] = 'verse'
+      verse[:id] = osis_id_to_inner_id(verse[:osisID])
+      verse.remove_attribute('osisID')
+      verse.remove_attribute('sID') # TODO: better HTML
+      verse.remove_attribute('eID') # ditto
+    end
+  end
+
+  def add_headers_and_footers(book)
+  end
+
+  def format_as_whole_doc(book, title)
+    xml_header + html5_header(title) + book.to_xhtml + html5_footer
+  end
+
+  def xml_header
+    %(<?xml version="1.0" encoding="UTF-8"?>\n)
+  end
+
+  def html5_header(title)
+    <<~EOS
+    <!DOCTYPE html>
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+    <head>
+    <meta charset="UTF-8">
+    <title>#{title}</title>
+    </head>
+    <body>
+    EOS
+  end
+
+  def html5_footer
+    <<~EOS
+    </body>
+    </html>
+    EOS
   end
 end
