@@ -1,4 +1,4 @@
-require 'osis2html5/version'
+require_relative 'osis2html5/version'
 
 require 'nokogiri'
 require 'parallel'
@@ -57,5 +57,9 @@ module Osis2Html5
 
     path = File.join(ARGV[1], filename)
     File.write(path, book.to_xhtml)
+  end
+
+  def osis_id_to_inner_id(osis_id)
+    osis_id.sub(/^[^\.]+\./, '')
   end
 end
