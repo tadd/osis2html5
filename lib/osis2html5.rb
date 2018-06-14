@@ -27,15 +27,9 @@ module Osis2Html5
     header 'parsing OSIS'
     doc = Nokogiri::XML.parse(File.read(osis))
 
-    header 'converting <ruby>'
-    convert_ruby(doc)
-
-    header 'generating'
-    books(doc).each do |book_id|
-      filename = book_id.downcase + '.html'
-      book = doc.css(%(div[@osisID="#{book_id}"]))
-      path = File.join(ARGV[1], filename)
-      File.write(path, book.to_xhtml)
+    header 'processing each books'
+    doc.css('div[@type="book"]').each do |book|
+      process_book(book)
     end
 
     header '... done!'
@@ -53,7 +47,14 @@ module Osis2Html5
     doc
   end
 
-  def books(doc)
-    doc.css('div[@type="book"]').map {|e| e[:osisID]}
+  def process_book(book)
+    name = book[:osisID].downcase
+    header name
+
+    convert_ruby(book)
+    filename = name + '.html'
+
+    path = File.join(ARGV[1], filename)
+    File.write(path, book.to_xhtml)
   end
 end
