@@ -84,6 +84,7 @@ module Osis2Html5
       title.remove_attribute('type')
 
       convert_verses(chapter)
+      convert_linegroups(chapter)
     end
   end
 
@@ -102,11 +103,24 @@ module Osis2Html5
     end
   end
 
+  def convert_linegroups(book, insert_br: true)
+    book.css('lg').each do |lg|
+      lg.name = 'span'
+      lg[:class] = 'lg'
+      lg.at_css('l').previous = '<br/>' if insert_br
+      lg.css('l').each do |l|
+        l.name = 'span'
+        l[:class] = 'l'
+        l << '<br/>' if insert_br
+      end
+    end
+  end
+
   def add_headers_and_footers(book)
   end
 
   def format_as_whole_doc(book, title)
-    xml_header + html5_header(title) + book.to_xhtml + html5_footer
+    xml_header + html5_header(title) + book.to_xml + html5_footer
   end
 
   def xml_header
