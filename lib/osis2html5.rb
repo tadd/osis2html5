@@ -33,6 +33,7 @@ module Osis2Html5
       process_book(book, outdir)
     end
 
+    generate_index(doc, outdir)
     header '... done!'
   end
 
@@ -141,5 +142,58 @@ module Osis2Html5
     </body>
     </html>
     EOS
+  end
+
+  def generate_index(doc, outdir)
+    index = <<-EOS
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta charset="UTF-8"/>
+<title>#{version(doc)}</title>
+</head>
+<body>
+<div class="container">
+<h2>目次</h2>
+#{book_list(doc)}
+</div>
+</body>
+</html>
+    EOS
+    path = File.join(outdir, 'index.html')
+    File.write(path, index)
+  end
+
+  def version(doc)
+    doc.at_css('work title').content
+  end
+
+  def book_tables(doc)
+    nnew = 27 # yes we know it
+    pairs = doc.css('div[@type="book"]').map do |book|
+      [book[:osisID].downcase, book.at_css('title[@type="main"]').content]
+    end
+    if pairs[0][0] == 'matt' # need to reorder
+      pairs = pairs[nnew..-1] + pairs[0...nnew]
+    end
+    [pairs[0...nnew], pairs[nnew..-1]]
+  end
+
+  def book_list(doc)
+    tables = book_tables(doc)
+    book_list_of_testament('旧約聖書', tables[0]) +
+      book_list_of_testament('新約聖書', tables[1])
+  end
+
+  def book_list_of_testament(title, table)
+    half = <<~EOS
+    <h3>#{title}</h3>
+    <ul>
+    EOS
+    lis = table.map do |id, name|
+      "<li><a href=#{id}.html>#{name}</a></li>"
+    end
+    half + lis.join("\n") + "\n</ul>\n"
   end
 end
