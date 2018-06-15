@@ -30,7 +30,7 @@ module Osis2Html5
 
     header 'processing each books'
     Parallel.each(doc.css('div[@type="book"]')) do |book|
-      process_book(book)
+      process_book(book, outdir)
     end
 
     header '... done!'
@@ -48,7 +48,7 @@ module Osis2Html5
     doc
   end
 
-  def process_book(book)
+  def process_book(book, outdir)
     name = book[:osisID].downcase
     header name
 
@@ -64,7 +64,7 @@ module Osis2Html5
     convert_chapters(book)
     filename = name + '.html'
 
-    path = File.join(ARGV[1], filename)
+    path = File.join(outdir, filename)
     File.write(path, format_as_whole_doc(book, title.content))
   end
 
