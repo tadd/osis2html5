@@ -64,7 +64,6 @@ module Osis2Html5
     convert_chapters(book)
     filename = name + '.html'
 
-    add_headers_and_footers(book)
     path = File.join(ARGV[1], filename)
     File.write(path, format_as_whole_doc(book, title.content))
   end
@@ -114,9 +113,6 @@ module Osis2Html5
         l << '<br/>' if insert_br
       end
     end
-  end
-
-  def add_headers_and_footers(book)
   end
 
   def format_as_whole_doc(book, title)
