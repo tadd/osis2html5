@@ -129,7 +129,7 @@ module Osis2Html5
     <!DOCTYPE html>
     <html xmlns="http://www.w3.org/1999/xhtml"#{lang_attrs}>
     <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>#{title}</title>
     </head>
     <body>
