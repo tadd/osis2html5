@@ -123,10 +123,11 @@ module Osis2Html5
     %(<?xml version="1.0" encoding="UTF-8"?>\n)
   end
 
-  def html5_header(title)
+  def html5_header(title, lang: 'ja')
+    lang_attrs = %( xml:lang="#{lang}" lang="#{lang}") if lang
     <<~EOS
     <!DOCTYPE html>
-    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+    <html xmlns="http://www.w3.org/1999/xhtml"#{lang_attrs}>
     <head>
     <meta charset="UTF-8">
     <title>#{title}</title>
