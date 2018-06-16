@@ -145,17 +145,18 @@ module Osis2Html5
   end
 
   def generate_index(doc, outdir)
+    ver = version(doc)
     index = <<-EOS
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
 <head>
 <meta charset="UTF-8"/>
-<title>#{version(doc)}</title>
+<title>#{ver}</title>
 </head>
 <body>
 <div class="container">
-<h2>目次</h2>
+<h2>#{ver} 目次</h2>
 #{book_list(doc)}
 </div>
 </body>
