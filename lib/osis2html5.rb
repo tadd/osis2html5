@@ -178,7 +178,8 @@ module Osis2Html5
     if pairs[0][0] == 'matt' # need to reorder
       pairs = pairs[nnew..-1] + pairs[0...nnew]
     end
-    [pairs[0...nnew], pairs[nnew..-1]]
+    nold = pairs.size - nnew
+    [pairs[0...nold], pairs[nold..-1]]
   end
 
   def book_list(doc)
