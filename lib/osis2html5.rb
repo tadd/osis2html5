@@ -156,7 +156,7 @@ module Osis2Html5
 </head>
 <body>
 <div class="container">
-<h2>#{ver} 目次</h2>
+<h1>#{ver}</h1>
 #{book_list(doc)}
 </div>
 </body>
@@ -194,7 +194,7 @@ module Osis2Html5
     end
 
     <<~EOS
-    <h3>#{title}</h3>
+    <h2>#{title}</h2>
     <ul>
     #{lis.join("\n")}
     </ul>
