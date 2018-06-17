@@ -73,6 +73,10 @@ module Osis2Html5
     osis_id.sub(/^[^\.]+\./, '').sub('.', ':')
   end
 
+  def osis_id_to_verse_number(osis_id)
+    osis_id.sub(/^.*\./, '')
+  end
+
   def convert_chapters(book)
     book.css('chapter').each do |chapter|
       chapter.name = 'div'
@@ -88,6 +92,10 @@ module Osis2Html5
     end
   end
 
+  def format_verse_number(number, id)
+    %(<a href="##{id}"><sup class="verse-number">#{number}</sup></a>)
+  end
+
   def convert_verses(book)
     book.css('verse').each do |verse|
       if verse[:osisID].nil? # TODO: better HTML
@@ -96,7 +104,10 @@ module Osis2Html5
       end
       verse.name = 'span'
       verse[:class] = 'verse'
-      verse[:id] = osis_id_to_inner_id(verse[:osisID])
+      osis_id = verse[:osisID]
+      inner_id = osis_id_to_inner_id(osis_id)
+      verse[:id] = inner_id
+      verse.child&.previous = format_verse_number(osis_id_to_verse_number(osis_id), inner_id)
       verse.remove_attribute('osisID')
       verse.remove_attribute('sID') # TODO: better HTML
       verse.remove_attribute('eID') # ditto
