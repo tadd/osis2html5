@@ -189,13 +189,15 @@ module Osis2Html5
   end
 
   def book_list_of_testament(title, table)
-    half = <<~EOS
-    <h3>#{title}</h3>
-    <ul>
-    EOS
     lis = table.map do |id, name|
       "<li><a href=#{id}.html>#{name}</a></li>"
     end
-    half + lis.join("\n") + "\n</ul>\n"
-  end
+
+    <<~EOS
+    <h3>#{title}</h3>
+    <ul>
+    #{lis.join("\n")}
+    </ul>
+    EOS
+end
 end
