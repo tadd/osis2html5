@@ -85,7 +85,7 @@ module Osis2Html5
       chapter.remove_attribute('osisID')
       title = chapter.at_css('title')
       title.name = 'h2'
-      title[:class] = 'chapter-name'
+      title[:class] = 'chapter-title'
       title.remove_attribute('type')
       title.children.wrap(%(<a href="##{inner_id}">))
 
