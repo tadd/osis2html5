@@ -80,12 +80,14 @@ module Osis2Html5
   def convert_chapters(book)
     book.css('chapter').each do |chapter|
       chapter.name = 'div'
-      chapter[:id] = osis_id_to_inner_id(chapter[:osisID])
+      inner_id = osis_id_to_inner_id(chapter[:osisID])
+      chapter[:id] = inner_id
       chapter.remove_attribute('osisID')
       title = chapter.at_css('title')
       title.name = 'h2'
       title[:class] = 'chapter-name'
       title.remove_attribute('type')
+      title.children.wrap(%(<a href="##{inner_id}">))
 
       convert_verses(chapter)
       convert_linegroups(chapter)
