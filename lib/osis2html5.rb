@@ -110,7 +110,12 @@ module Osis2Html5
       inner_id = osis_id_to_inner_id(osis_id)
       verse[:id] = inner_id
       verse_number = osis_id_to_verse_number(osis_id)
-      verse.child&.previous = format_verse_number(verse_number, inner_id)
+      formatted = format_verse_number(verse_number, inner_id)
+      if verse.child
+        verse.child.previous = formatted
+      else
+        verse.next_sibling.previous = formatted
+      end
       verse.remove_attribute('osisID')
       verse.remove_attribute('sID') # TODO: better HTML
       verse.remove_attribute('eID') # ditto
