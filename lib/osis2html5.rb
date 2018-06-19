@@ -95,7 +95,7 @@ module Osis2Html5
   end
 
   def format_verse_number(number, id)
-    %(<a href="##{id}"><sup class="verse-number">#{number}</sup></a>)
+    %(<a href="##{id}"><span class="verse-number">#{number}</span></a>)
   end
 
   def convert_verses(book)
