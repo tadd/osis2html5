@@ -204,7 +204,7 @@ module Osis2Html5
 
   def book_list_of_testament(title, table)
     lis = table.map do |id, name|
-      "<li><a href=#{id}.html>#{name}</a></li>"
+      %(<li><a href="#{id}.html">#{name}</a></li>)
     end
 
     <<~EOS
