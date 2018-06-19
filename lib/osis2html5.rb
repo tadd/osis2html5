@@ -53,7 +53,7 @@ module Osis2Html5
     name = book[:osisID].downcase
     header name
 
-    book[:class] = 'book'
+    book[:class] ='book container'
     book.remove_attribute('type')
     book.remove_attribute('osisID')
 
