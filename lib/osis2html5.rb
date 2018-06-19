@@ -100,12 +100,15 @@ module Osis2Html5
 
   def convert_verses(book)
     book.css('verse').each do |verse|
-      if verse[:osisID].nil? # TODO: better HTML
-        verse.remove
-        next
-      end
       verse.name = 'span'
       verse[:class] = 'verse'
+
+      if verse.key?('eID')
+        verse['data-e-id'] = osis_id_to_inner_id(verse['eID'])
+        verse.remove_attribute('eID')
+        next
+      end
+
       osis_id = verse[:osisID]
       inner_id = osis_id_to_inner_id(osis_id)
       verse[:id] = inner_id
@@ -117,8 +120,11 @@ module Osis2Html5
         verse.next_sibling.previous = formatted
       end
       verse.remove_attribute('osisID')
-      verse.remove_attribute('sID') # TODO: better HTML
-      verse.remove_attribute('eID') # ditto
+
+      if verse.key?('sID')
+        verse['data-s-id'] = osis_id_to_inner_id(verse['sID'])
+        verse.remove_attribute('sID')
+      end
     end
   end
 
