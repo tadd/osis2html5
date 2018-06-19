@@ -1,21 +1,28 @@
 require_relative 'osis2html5/version'
 
+require 'optparse'
 require 'nokogiri'
 require 'parallel'
 
 module Osis2Html5
   module_function
 
-  def run(*argv)
-    usage(error: false) if argv.size == 0
-    usage(error: true) unless argv.size == 2
-    main(*argv)
-  end
+  def run
+    OptionParser.new do |o|
+      o.banner = "usage: osis2html5 [options] <input.osis> <output dirname>"
 
-  def usage(error:)
-    out = error ? STDERR : STDOUT
-    out.puts "usage: osis2html5 <input.osis> <output dirname>"
-    exit(!error)
+      o.on('-v', '--version', 'show version') do
+        puts "osis2html5 #{VERSION}"
+        exit
+      end
+
+      o.on('-h', '--help', 'prints this help') do
+        puts o
+        exit
+      end
+    end.parse!
+
+    main(*ARGV)
   end
 
   def header(message)
