@@ -224,5 +224,5 @@ module Osis2Html5
     #{lis.join("\n")}
     </ul>
     EOS
-end
+  end
 end
