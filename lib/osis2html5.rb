@@ -199,7 +199,7 @@ module Osis2Html5
 <body>
 <div class="container">
 <h1>#{ver}</h1>
-#{book_list(doc)}
+#{book_list(doc).chomp}
 </div>
 </body>
 </html>
