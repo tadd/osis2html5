@@ -8,6 +8,7 @@ module Osis2Html5
   module_function
 
   def run
+    opts = {}
     OptionParser.new do |o|
       o.banner = "usage: osis2html5 [options] <input.osis> <output dirname>"
 
@@ -20,16 +21,20 @@ module Osis2Html5
         puts o
         exit
       end
+
+      o.on('--erb', 'enable erb mode') do
+        opts[:erb] = true
+      end
     end.parse!
 
-    main(*ARGV)
+    main(*ARGV, **opts)
   end
 
   def header(message)
     STDERR.puts message
   end
 
-  def main(osis, outdir)
+  def main(osis, outdir, **opts)
     Dir.mkdir(outdir) rescue nil # just ignore created dir
 
     header 'parsing OSIS'
@@ -37,10 +42,10 @@ module Osis2Html5
 
     header 'processing each books'
     Parallel.each(doc.css('div[@type="book"]')) do |book|
-      process_book(book, outdir)
+      process_book(book, outdir, erb: opts[:erb])
     end
 
-    generate_index(doc, outdir)
+    generate_index(doc, outdir, erb: opts[:erb])
     header '... done!'
   end
 
@@ -56,7 +61,7 @@ module Osis2Html5
     doc
   end
 
-  def process_book(book, outdir)
+  def process_book(book, outdir, erb: false)
     name = book[:osisID].downcase
     header name
 
@@ -71,9 +76,10 @@ module Osis2Html5
     convert_ruby(book)
     convert_chapters(book)
     filename = name + '.html'
+    filename << '.erb' if erb
 
     path = File.join(outdir, filename)
-    File.write(path, format_as_whole_doc(book, title.content))
+    File.write(path, format_as_whole_doc(book, title.content, erb: erb))
   end
 
   def osis_id_to_inner_id(osis_id)
@@ -148,22 +154,26 @@ module Osis2Html5
     end
   end
 
-  def format_as_whole_doc(book, title)
-    xml_header + html5_header(title) + book.to_xml + html5_footer
+  def format_as_whole_doc(book, title, erb: false)
+    xml_header + html5_header(title, erb: erb) + book.to_xml + html5_footer
+  end
+
+  def embed_variable(name)
+    "\n<%= #{name} if binding.local_variable_defined?(:#{name}) %>"
   end
 
   def xml_header
     %(<?xml version="1.0" encoding="UTF-8"?>\n)
   end
 
-  def html5_header(title, lang: 'ja')
+  def html5_header(title, lang: 'ja', erb: false)
     lang_attrs = %( xml:lang="#{lang}" lang="#{lang}") if lang
     <<~EOS
     <!DOCTYPE html>
     <html xmlns="http://www.w3.org/1999/xhtml"#{lang_attrs}>
     <head>
     <meta charset="UTF-8"/>
-    <title>#{title}</title>
+    <title>#{title}</title>#{embed_variable(:head) if erb}
     </head>
     <body>
     EOS
@@ -176,7 +186,7 @@ module Osis2Html5
     EOS
   end
 
-  def generate_index(doc, outdir)
+  def generate_index(doc, outdir, erb: false)
     ver = version(doc)
     index = <<-EOS
 <?xml version="1.0" encoding="UTF-8"?>
@@ -184,7 +194,7 @@ module Osis2Html5
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
 <head>
 <meta charset="UTF-8"/>
-<title>#{ver}</title>
+<title>#{ver}</title>#{embed_variable(:head) if erb}
 </head>
 <body>
 <div class="container">
@@ -194,7 +204,9 @@ module Osis2Html5
 </body>
 </html>
     EOS
-    path = File.join(outdir, 'index.html')
+    filename = 'index.html'
+    filename << '.erb' if erb
+    path = File.join(outdir, filename)
     File.write(path, index)
   end
 
