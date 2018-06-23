@@ -71,7 +71,7 @@ module Osis2Html5
     book.remove_attribute('type')
     book.remove_attribute('osisID')
 
-    summary = body_text(book)[0, SUMMARY_NCHAR]
+    summary = body_text(book)[0, SUMMARY_NCHAR-2] + '……'
 
     title = book.at_css('title')
     title.name = 'h1'
