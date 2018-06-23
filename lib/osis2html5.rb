@@ -5,6 +5,8 @@ require 'nokogiri'
 require 'parallel'
 
 module Osis2Html5
+  SUMMARY_NCHAR = 1000
+
   module_function
 
   def run
@@ -69,6 +71,8 @@ module Osis2Html5
     book.remove_attribute('type')
     book.remove_attribute('osisID')
 
+    summary = body_text(book)[0, SUMMARY_NCHAR]
+
     title = book.at_css('title')
     title.name = 'h1'
     title.remove_attribute('type')
@@ -79,7 +83,13 @@ module Osis2Html5
     filename << '.erb' if erb
 
     path = File.join(outdir, filename)
-    File.write(path, format_as_whole_doc(book, title.content, erb: erb))
+    File.write(path, format_as_whole_doc(book, title.content, summary, erb: erb))
+  end
+
+  def body_text(book)
+    nodes = book.dup
+    nodes.css('title').remove
+    nodes.text.gsub(/\n+/, '')
   end
 
   def osis_id_to_inner_id(osis_id)
@@ -154,8 +164,8 @@ module Osis2Html5
     end
   end
 
-  def format_as_whole_doc(book, title, erb: false)
-    xml_header + html5_header(title, erb: erb) + book.to_xml + html5_footer
+  def format_as_whole_doc(book, title, summary, erb: false)
+    xml_header + html5_header(title, summary, erb: erb) + book.to_xml + html5_footer
   end
 
   def embed_variable(name)
@@ -166,13 +176,16 @@ module Osis2Html5
     %(<?xml version="1.0" encoding="UTF-8"?>\n)
   end
 
-  def html5_header(title, lang: 'ja', erb: false)
+  def html5_header(title, summary, lang: 'ja', erb: false)
     lang_attrs = %( xml:lang="#{lang}" lang="#{lang}") if lang
     <<~EOS
     <!DOCTYPE html>
     <html xmlns="http://www.w3.org/1999/xhtml"#{lang_attrs}>
     <head>
     <meta charset="UTF-8"/>
+    <meta property="og:title" content="#{title}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:description" content="#{summary}"/>
     <title>#{title}</title>#{embed_variable(:head) if erb}
     </head>
     <body>
