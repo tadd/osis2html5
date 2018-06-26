@@ -65,7 +65,7 @@ module Osis2Html5
 
   def process_book(book, outdir, erb: false)
     name = book[:osisID].downcase
-    header name
+    print name + ' '
 
     book[:class] ='book container'
     book.remove_attribute('type')
