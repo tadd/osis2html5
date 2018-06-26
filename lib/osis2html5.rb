@@ -169,7 +169,7 @@ module Osis2Html5
   end
 
   def embed_variable(name)
-    "\n<%= #{name} if binding.local_variable_defined?(:#{name}) %>"
+    "<%= #{name} if binding.local_variable_defined?(:#{name}) %>"
   end
 
   def xml_header
@@ -186,7 +186,8 @@ module Osis2Html5
     <meta property="og:title" content="#{title}"/>
     <meta property="og:type" content="website"/>
     <meta property="og:description" content="#{summary}"/>
-    <title>#{title}</title>#{embed_variable(:head) if erb}
+    <title>#{title}</title>
+    #{embed_variable(:head) if erb}
     </head>
     <body>
     EOS
@@ -207,7 +208,8 @@ module Osis2Html5
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
 <head>
 <meta charset="UTF-8"/>
-<title>#{ver}</title>#{embed_variable(:head) if erb}
+<title>#{ver}</title>
+#{embed_variable(:head) if erb}
 </head>
 <body>
 <div class="container">
