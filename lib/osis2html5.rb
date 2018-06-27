@@ -202,22 +202,22 @@ module Osis2Html5
 
   def generate_index(doc, outdir, erb: false)
     ver = version(doc)
-    index = <<-EOS
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
-<head>
-<meta charset="UTF-8"/>
-<title>#{ver}</title>
-#{embed_variable(:head) if erb}
-</head>
-<body>
-<div class="container">
-<h1>#{ver}</h1>
-#{book_list(doc).chomp}
-</div>
-</body>
-</html>
+    index = <<~EOS
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html>
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+    <head>
+    <meta charset="UTF-8"/>
+    <title>#{ver}</title>
+    #{embed_variable(:head) if erb}
+    </head>
+    <body>
+    <div class="container">
+    <h1>#{ver}</h1>
+    #{book_list(doc).chomp}
+    </div>
+    </body>
+    </html>
     EOS
     filename = 'index.html'
     filename << '.erb' if erb
