@@ -184,12 +184,12 @@ module Osis2Html5
     <!DOCTYPE html>
     <html xmlns="http://www.w3.org/1999/xhtml"#{lang_attrs}>
     <head>
+    #{embed_variable(:head) if erb}
     <meta charset="UTF-8"/>
     <meta property="og:title" content="#{title}"/>
     <meta property="og:type" content="website"/>
     <meta property="og:description" content="#{summary}"/>
     <title>#{title}</title>
-    #{embed_variable(:head) if erb}
     </head>
     <body>
     EOS
@@ -209,9 +209,9 @@ module Osis2Html5
     <!DOCTYPE html>
     <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
     <head>
+    #{embed_variable(:head) if erb}
     <meta charset="UTF-8"/>
     <title>#{ver}</title>
-    #{embed_variable(:head) if erb}
     </head>
     <body>
     <div class="container">
