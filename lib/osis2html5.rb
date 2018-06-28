@@ -118,7 +118,7 @@ module Osis2Html5
   end
 
   def format_verse_number(number, id)
-    %(<a href="##{id}"><span class="verse-number">#{number}</span></a>)
+    %(<span class="verse-number"><a href="##{id}">#{number}</a></span>)
   end
 
   def convert_verses(book)
@@ -135,6 +135,8 @@ module Osis2Html5
       osis_id = verse[:osisID]
       inner_id = osis_id_to_inner_id(osis_id)
       verse[:id] = inner_id
+      verse.children = %(<span class="verse-content">#{verse.inner_html}</span>)
+
       verse_number = osis_id_to_verse_number(osis_id)
       formatted = format_verse_number(verse_number, inner_id)
       if verse.child
