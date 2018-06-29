@@ -193,6 +193,7 @@ module Osis2Html5
     <title>#{title}#{embed_variable(:additional_title) if erb}</title>
     </head>
     <body>
+    #{embed_variable(:head_of_body) if erb}
     EOS
   end
 
