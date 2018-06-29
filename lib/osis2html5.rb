@@ -216,10 +216,11 @@ module Osis2Html5
     <title>#{ver}#{embed_variable(:additional_title) if erb}</title>
     </head>
     <body>
-    <div class="container">
+    #{embed_variable(:head_of_body) if erb}
+    <main class="container">
     <h1>#{ver}</h1>
     #{book_list(doc).chomp}
-    </div>
+    </main>
     </body>
     </html>
     EOS
