@@ -189,7 +189,7 @@ module Osis2Html5
     <meta property="og:title" content="#{title}"/>
     <meta property="og:type" content="website"/>
     <meta property="og:description" content="#{summary}"/>
-    <title>#{title}</title>
+    <title>#{title}#{embed_variable(:additional_title) if erb}</title>
     </head>
     <body>
     EOS
@@ -211,7 +211,7 @@ module Osis2Html5
     <head>
     #{embed_variable(:head) if erb}
     <meta charset="UTF-8"/>
-    <title>#{ver}</title>
+    <title>#{ver}#{embed_variable(:additional_title) if erb}</title>
     </head>
     <body>
     <div class="container">
