@@ -185,8 +185,8 @@ module Osis2Html5
     <!DOCTYPE html>
     <html xmlns="http://www.w3.org/1999/xhtml"#{lang_attrs}>
     <head>
-    #{embed_variable(:head) if erb}
     <meta charset="UTF-8"/>
+    #{embed_variable(:head) if erb}
     <meta property="og:title" content="#{title}"/>
     <meta property="og:type" content="website"/>
     <meta property="og:description" content="#{summary}"/>
