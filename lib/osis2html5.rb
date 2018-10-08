@@ -5,7 +5,7 @@ require 'nokogiri'
 require 'parallel'
 
 module Osis2Html5
-  SUMMARY_NCHAR = 1000
+  SUMMARY_NCHAR = 140
 
   module_function
 
