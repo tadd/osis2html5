@@ -51,14 +51,18 @@ module Osis2Html5
     header '... done!'
   end
 
-  def convert_ruby(doc)
+  def convert_ruby(doc, rp: true)
     ws = doc.css('w')
     ws.wrap '<ruby/>'
     ws.each do |w|
       rb, rt = w.text, w[:gloss]
       ruby = w.parent
       ruby.content = rb
-      ruby << "<rt>#{rt}</rt>"
+      if rp
+        ruby << "<rp>（</rp><rt>#{rt}</rt><rp>）</rp>"
+      else
+        ruby << "<rt>#{rt}</rt>"
+      end
     end
     doc
   end
