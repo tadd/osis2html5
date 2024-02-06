@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'nokogiri', '> 0'
   spec.add_runtime_dependency 'parallel', '> 0'
-  spec.add_development_dependency "bundler", "~> 1.16"
+  spec.add_development_dependency "bundler", "> 0"
   spec.add_development_dependency "rake", "> 0"
   spec.add_development_dependency "test-unit", "> 0"
 end
