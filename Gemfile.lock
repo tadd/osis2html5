@@ -9,7 +9,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     mini_portile2 (2.8.8)
-    nokogiri (1.18.3)
+    nokogiri (1.18.5)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     parallel (1.26.3)
@@ -29,4 +29,4 @@ DEPENDENCIES
   test-unit (> 0)
 
 BUNDLED WITH
-   2.6.5
+   2.6.6
