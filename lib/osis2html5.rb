@@ -253,10 +253,20 @@ module Osis2Html5
     [pairs[0...nold], pairs[nold..-1]]
   end
 
+  def testament_titles(doc)
+    gr = doc.css('div[@type="bookGroup"]')
+    labels = [%w[x-OT 旧約聖書], %w[x-NT 新約聖書]]
+    titles = labels.map do |st, deftitle|
+      gr&.at(%(div[@subType="#{st}"] title))&.content || deftitle
+    end
+  end
+
   def book_list(doc)
+    titles = testament_titles(doc)
     tables = book_tables(doc)
-    book_list_of_testament('旧約聖書', tables[0]) +
-      book_list_of_testament('新約聖書', tables[1])
+    titles.zip(tables).map do |title, table|
+      book_list_of_testament(title, table)
+    end.join
   end
 
   def book_list_of_testament(title, table)
