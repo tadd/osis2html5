@@ -172,7 +172,10 @@ module Osis2Html5
   end
 
   def format_as_whole_doc(book, title, summary, erb: false)
-    xml_header + html5_header(title, summary, erb: erb) + book.to_xml + html5_footer
+    xml_header +
+      html5_header(title, summary, lang: book.lang, erb: erb) +
+      book.to_xml +
+      html5_footer
   end
 
   def embed_variable(name)
