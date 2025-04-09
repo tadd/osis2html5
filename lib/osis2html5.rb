@@ -47,7 +47,7 @@ module Osis2Html5
       process_book(book, outdir, erb: opts[:erb])
     end
 
-    generate_index(doc, outdir, erb: opts[:erb])
+    generate_index(doc, outdir, lang: doc.at('osisText').lang, erb: opts[:erb])
     header '... done!'
   end
 
@@ -187,7 +187,7 @@ module Osis2Html5
   end
 
   def html5_header(title, summary, lang: 'ja', erb: false)
-    lang_attrs = %( xml:lang="#{lang}" lang="#{lang}") if lang
+    lang_attrs = %( xml:lang="#{lang}" lang="#{lang}")
     <<~EOS
     <!DOCTYPE html>
     <html xmlns="http://www.w3.org/1999/xhtml"#{lang_attrs}>
@@ -211,12 +211,12 @@ module Osis2Html5
     EOS
   end
 
-  def generate_index(doc, outdir, erb: false)
+  def generate_index(doc, outdir, lang: 'ja', erb: false)
     ver = version(doc)
     index = <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE html>
-    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="#{lang}" lang="#{lang}">
     <head>
     <meta charset="UTF-8"/>
     #{embed_variable(:head) if erb}
