@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    osis2html5 (0.1.0)
+    osis2html5 (0.1.1)
       nokogiri (> 0)
       parallel (> 0)
 
