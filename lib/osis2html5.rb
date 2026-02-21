@@ -72,7 +72,7 @@ module Osis2Html5
     print name + ' '
 
     book.name = 'main'
-    book[:class] ='book container'
+    book[:class] ='book'
     book.remove_attribute('type')
     book.remove_attribute('osisID')
 
@@ -200,12 +200,14 @@ module Osis2Html5
     <title>#{title}#{embed_variable(:additional_title) if erb}</title>
     </head>
     <body>
+    <div class="container">
     #{embed_variable(:head_of_body) if erb}
     EOS
   end
 
   def html5_footer
     <<~EOS
+    </div>
     </body>
     </html>
     EOS
@@ -223,11 +225,13 @@ module Osis2Html5
     <title>#{ver}#{embed_variable(:additional_title) if erb}</title>
     </head>
     <body>
+    <div class="container">
     #{embed_variable(:head_of_body) if erb}
-    <main class="container">
+    <main>
     <h1>#{ver}</h1>
     #{book_list(doc).chomp}
     </main>
+    </div>
     </body>
     </html>
     EOS
